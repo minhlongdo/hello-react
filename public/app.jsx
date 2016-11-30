@@ -1,51 +1,72 @@
-var Greeter = React.createClass({
-  getDefaultProps: function() {
-    return {
-      name: 'React'
-    };
-  },
-  getInitialState: function() {
-    return {
-      name: this.props.name
-    };
-  },
-  onButtonClick: function(e) {
-    //Prevent browser from refreshing the page
-    e.preventDefault();
-
-    var nameRef = this.refs.name;
-    var name = nameRef.value;
-    // Set string in input to empty
-    nameRef.value = '';
-
-    if (typeof name == 'string' && name.length > 0) {
-      /*
-        Need to use a setter to be able to set state of the React component,
-        will re-render the part of the component that has changed.
-      */
-      this.setState({
-        name: name
-      });
-    }
-  },
+var GreeterMessage = React.createClass({
   render: function() {
-    var name = this.state.name;
+    var name = this.props.name;
+    var message = this.props.message;
 
     return (
       <div>
         <h1>Hello {name}!</h1>
-        <p>This is from a component</p>
+        <p>{message}!!!</p>
+      </div>
+    );
+  }
+});
 
-        <form onSubmit={this.onButtonClick}>
-          <input type="text" ref="name"/>
-          <button>Set Name</button>
-        </form>
+var GreeterForm = React.createClass({
+  onFormSubmit: function(e) {
+    e.preventDefault();
+
+    var nameRef = this.refs.name;
+    var name = nameRef.value;
+
+    if (name.length > 0) {
+      nameRef.value = '';
+      this.props.onNewName(name);
+    }
+  },
+  render: function() {
+    return (
+      <form onSubmit={this.onFormSubmit}>
+        <input type="text" ref="name"/>
+        <button>Set Name</button>
+      </form>
+    );
+  }
+});
+
+var Greeter = React.createClass({
+  getDefaultProps: function() {
+    return {
+      name: 'React',
+      message: 'This is the default message'
+    };
+  },
+  getInitialState: function() {
+    return {
+      name: this.props.name,
+      message: this.props.message
+    };
+  },
+  handleNewName: function(name) {
+    this.setState({
+      name: name
+    });
+  },
+  render: function() {
+    var name = this.state.name;
+    var message = this.state.message;
+
+    return (
+      <div>
+        <GreeterMessage name={name} message={message}/>
+        <GreeterForm onNewName={this.handleNewName}/>
       </div>
     );
   }
 });
 
 var firstName = "Minh-Long"
+var message;
 
 ReactDOM.render(
   <Greeter name={firstName}/>,
