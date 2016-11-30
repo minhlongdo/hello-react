@@ -4,16 +4,32 @@ var Greeter = React.createClass({
       name: 'React'
     };
   },
+  getInitialState: function() {
+    return {
+      name: this.props.name
+    };
+  },
   onButtonClick: function(e) {
     //Prevent browser from refreshing the page
     e.preventDefault();
 
-    var name = this.refs.name.value;
+    var nameRef = this.refs.name;
+    var name = nameRef.value;
+    // Set string in input to empty
+    nameRef.value = '';
 
-    alert(name);
+    if (typeof name == 'string' && name.length > 0) {
+      /*
+        Need to use a setter to be able to set state of the React component,
+        will re-render the part of the component that has changed.
+      */
+      this.setState({
+        name: name
+      });
+    }
   },
   render: function() {
-    var name = this.props.name;
+    var name = this.state.name;
 
     return (
       <div>
