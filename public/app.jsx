@@ -16,7 +16,9 @@ var Greeter = React.createClass({
   }
 });
 
+var firstName = "Minh-Long"
+
 ReactDOM.render(
-  <Greeter name="Test Name"/>,
+  <Greeter name={firstName}/>,
   document.getElementById('app')
 );
